@@ -70,6 +70,7 @@ function makeEnv() {
         cons: (x, y) => [x].concat(y),
         "eq?": (x, y) => x === y,
         //"equal?" list contents equality D:
+        length: (x) => x.length,
         list: (...args) => args,
         "list?": (x) => Array.isArray(x),
         map: (f, x) => x.map(f),
