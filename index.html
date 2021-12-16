@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <title>ntrprty</title>
 
+<div id=replOut>REPL:<br></div>
+<br>
+<input size=50 onkeydown="replSubmit()">
+
 <script>
 // based on lispy by Peter Norvig: http://norvig.com/lispy.html
 // forked from https://gist.github.com/Enichan/4a9fa87aef6405e13e1c072baa117beb by Enichan
@@ -142,7 +146,3 @@ function replSubmit(e) {
 	elem.scrollIntoView()  // TODO: Prepend results to avoid this need.
 }
 </script>
-
-<div id=replOut>REPL:<br></div>
-<br>
-<input size=50 onkeydown="replSubmit()">
