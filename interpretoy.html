@@ -38,7 +38,7 @@ function parse(tokens) {
 
 function atom(token) {
     let num = token * 1;
-    if (typeof num === "number") {
+    if (num || num === 0) {
         return num;
     }
     return token;
