@@ -2,12 +2,12 @@
 <title>ntrprty</title>
 
 <style>
-/* Light-weight global reset. */
 *, *:before, *:after {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	line-height: 1;
 }
 
 body {
@@ -68,7 +68,7 @@ code, pre, label, input, dd:before, dt:before {
 }
 
 #repl .working:after {
-  content: "🟢";
+	content: "🟢";
 }
 
 #repl dt.error {
@@ -77,7 +77,7 @@ code, pre, label, input, dd:before, dt:before {
 }
 
 #repl .error:after {
-  content: "🛑";
+	content: "🛑";
 }
 
 #repl dt.error + * {
@@ -126,38 +126,38 @@ code, pre, label, input, dd:before, dt:before {
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
-    color: #aaa;
-    background: #111;
-  }
-
-  a {
-    color: #999;
-  }
-
-  pre {
-    color: #999;
-    border-color: #333;
-  }
-
-  #repl input:focus {
-    color: white;
-  }
-
-  #repl dt.error {
-    background-color: #300;
-    color: #ddd;
-  }
-
-  #repl dt.error {
-    background-color: #400;
-    color: #999;
-  }
-
-  #repl dt.error + * {
-    background-color: #200;
-    color: #ddd;
-  }
+	body {
+		color: #aaa;
+		background: #111;
+	}
+	
+	a {
+		color: #999;
+	}
+	
+	pre {
+		color: #999;
+		border-color: #333;
+	}
+	
+	#repl input:focus {
+		color: white;
+	}
+	
+	#repl dt.error {
+		background-color: #300;
+		color: #ddd;
+	}
+	
+	#repl dt.error {
+		background-color: #400;
+		color: #999;
+	}
+	
+	#repl dt.error + * {
+		background-color: #200;
+		color: #ddd;
+	}
 }
 </style>
 
@@ -171,7 +171,6 @@ code, pre, label, input, dd:before, dt:before {
 // blame neither for what was done here
 // title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
-// This is akin to assigning a handful of Python lambdas, which is heinous… but these really are more mathematical functions...
 const load = source => parse(tokenize(source)),
 	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i),
 	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
