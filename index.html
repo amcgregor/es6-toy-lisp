@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>ntrprty</title>
+<title>ntrprtyrpl</title>
 
 <style>
 <!--/*--><![CDATA[/*><!--*/
@@ -173,7 +173,7 @@ code, dd::before, dt::before, input, label, pre {
 // title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
 const load = source => parse(tokenize(source)),
-	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i),
+	tokenize = source => source.replaceAll("'", " ' ").replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "").split(" ").filter(i => i),
 	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
 	makeProc = (parms, body, env) => ((...args) => interp(body, new Env(parms, args, env)))
 
@@ -182,14 +182,18 @@ function parse(tokens) {
 	
 	let token = tokens.shift()
 	
-	if ( token === "(" ) {
-		let l = []  // Can *almost* use a comprehension here.
-		while (tokens[0] !== ")") l.push(parse(tokens))
-		tokens.shift()
-		return l
+	switch ( token ) {
+		case "(":
+			let l = []  // Can *almost* use a comprehension here.
+			while (tokens[0] !== ")") l.push(parse(tokens))
+			tokens.shift()
+			return l
+		case "'":
+			let next = parse(tokens)
+			return ["quote", next]
+		case ")": throw new Error("Unexpected ')'")
+		default: return atom(token)
 	}
-	else if (token === ")") throw new Error("Unexpected ')'")
-	else return atom(token)
 }
 
 function atom(token) {
@@ -215,9 +219,9 @@ function makeEnv() {
 	
 	for ( let property of Object.getOwnPropertyNames(Math) )
 		if (typeof Math[property] === 'function') env[property] = Math[property]
-	
-	for ( let op of [["+"], ["-"], ["*"], ["/"], ["<"], ["<="], [">"], [">="], ["=", "==="]] )
-		env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[1] || op[0]} rhs;`)
+		
+		for ( let op of [["+"], ["-"], ["*"], ["/"], ["<"], ["<="], [">"], [">="], ["=", "==="], ["|"], ["&"], ["<<"], [">>"]] )
+			env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[1] || op[0]} rhs;`)
 	
 	Object.assign(env, {
 		append: (x, y, ...args) => x.concat(y).concat(...args),
@@ -226,6 +230,7 @@ function makeEnv() {
 		car: (x) => x[0],
 		cdr: (x) => x.slice(1),
 		cons: (x, y) => [x].concat(y),
+		display: (...args) => console.log(...args),
 		"eq?": (x, y) => x === y,
 		// "equal?" list contents equality D:
 		length: (x) => x.length,
@@ -233,7 +238,7 @@ function makeEnv() {
 		"list?": (x) => Array.isArray(x),
 		map: (f, x) => x.map(f),
 		not: (x) => x === false ? true : false,
-		"null?": (x) => Array.isArray(x) && x.length == 0,
+		"null?": (x) => (Array.isArray(x) && x.length == 0) || (typeof x === "undefined") || (x === null),
 		"number?": (x) => typeof x === "number",
 		"procedure?": (x) => typeof x === "function",
 		reverse: (x) => x.reverse(),
@@ -265,13 +270,17 @@ function interp(x, env) {
 		case "set!":  // (set! symbol exp)
 			symbol = x[1], exp = x[2]
 			return (env.find(symbol)[symbol] = interp(exp, env))
+		case "eval":  // custom shenanigans
+			let exp = interp(x[1], env)
+			return interp(exp, env)
 		case "lambda":  // (lambda (symbol...) body)
 			let parms = x[1], body = x[2]
 			return makeProc(parms, body, env)
 		default:
 			let proc = interp(x[0], env)
 			let args = x.slice(1).map(exp => interp(exp, env))
-			if (typeof proc !== "function") throw new Error("Expected function.")
+			if (typeof proc !== "function")
+				throw new Error("Expected function, got " + (proc || "").toString())
 			return proc.apply(proc, args)
 	}
 }
