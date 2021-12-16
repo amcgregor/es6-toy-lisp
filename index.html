@@ -294,7 +294,17 @@ function tick(source, out) {
 	}
 }
 
-function replSubmit(e) {
+repl.addEventListener('click', e => {
+	// Permit re-use of previously evaluated expressions.
+	e = e || window.event
+	let elem = e.srcElement || e.target
+	
+	if ( !elem.matches('dt:not(:first-child)') ) return
+	input.value = elem.innerText
+	input.focus()
+}, false)
+
+input.addEventListener('keydown', e => {
 	e = e || window.event
 	if ( e.keyCode != 13 ) return
 	
@@ -302,5 +312,5 @@ function replSubmit(e) {
 	tick(elem.value, replOut)
 	elem.value = ""
 	elem.scrollIntoView()  // TODO: Prepend results to avoid this need.
-}
+})
 </script>
