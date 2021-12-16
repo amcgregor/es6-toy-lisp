@@ -57,9 +57,8 @@ function makeEnv() {
             env[property] = Math[property];
         }
     });
-    [ ["+", "Add"], ["-", "Sub"], ["*", "Mul"], ["/", "Div"], ["<", "Less"], ["<=", "LeEq"], [">", "Grea"], [">=", "GeEq"], [ "=", "Eq", "===" ]].forEach(op => {
-        let opName = `op${op[1]}`;
-        env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[2] || op[0]} rhs;`);
+    [ ["+"], ["-"], ["*"], ["/"], ["<"], ["<="], [">"], [">="], [ "=", "===" ]].forEach(op => {
+        env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[1] || op[0]} rhs;`);
     });
     Object.assign(env, {
         append: (x, y, ...args) => x.concat(y).concat(...args),
