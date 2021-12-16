@@ -11,6 +11,7 @@
 // blame neither for what was done here
 // title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
+// This is akin to assigning a handful of Python lambdas, which is heinous… but these really are more mathematical functions...
 const load = source => parse(tokenize(source)),
 	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i),
 	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
@@ -22,10 +23,8 @@ function parse(tokens) {
 	let token = tokens.shift()
 	
 	if ( token === "(" ) {
-		let l = []
-		
+		let l = []  // Can *almost* use a comprehension here.
 		while (tokens[0] !== ")") l.push(parse(tokens))
-		
 		tokens.shift()
 		return l
 	}
@@ -34,7 +33,7 @@ function parse(tokens) {
 }
 
 function atom(token) {
-	let num = token * 1
+	let num = token * 1  // Similarly, can almost use an arrow function if not for this cast.
 	return (num || num === 0) ? num : token
 }
 
