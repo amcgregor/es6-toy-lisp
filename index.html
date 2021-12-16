@@ -291,7 +291,6 @@ function tick(source) {
 	
 	outputElement.append(outputCode)
 	
-	
 	let val
 	
 	try {
@@ -301,9 +300,7 @@ function tick(source) {
 		inputElement.classList.add('error')
 	}
 	
-	if (typeof val !== "undefined") {
-		outputCode.innerText = toLispString(val)
-	}
+	if (typeof val !== "undefined") outputCode.innerText = toLispString(val)
 	
 	inputElement.after(outputElement)
 	inputElement.classList.remove('working')
