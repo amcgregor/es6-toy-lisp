@@ -67,6 +67,10 @@ code, pre, label, input, dd:before, dt:before {
 	line-height: 1.66;
 }
 
+#repl .working:after {
+  content: "🟢";
+}
+
 #repl dt.error {
 	background-color: #F00A;
 	color: black;
@@ -161,8 +165,6 @@ code, pre, label, input, dd:before, dt:before {
 <dl id="repl">
 	<dt><input id="input" placeholder="(+ 2 4)" autofocus="true"></dt>
 </dl>
-
-<div id=replOut></div>
 
 <script>
 // based on lispy by Peter Norvig: http://norvig.com/lispy.html
@@ -276,7 +278,7 @@ function interp(x, env) {
 	}
 }
 
-function tick(source, out) {
+function tick(source) {
 	let inputElement = document.createElement('dt'),
 		inputCode = document.createElement('code'),
 		outputElement = document.createElement('dd'),
@@ -322,7 +324,7 @@ input.addEventListener('keydown', e => {
 	if ( e.keyCode != 13 ) return
 	
 	let elem = e.srcElement || e.target
-	tick(elem.value, replOut)
+	tick(elem.value)
 	elem.value = ""
 })
 </script>
