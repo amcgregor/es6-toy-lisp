@@ -1,6 +1,159 @@
 <!DOCTYPE html>
 <title>ntrprty</title>
 
+<style>
+/* Light-weight global reset. */
+*, *:before, *:after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #888;
+  background: #eee;
+  font-size: 17px;
+}
+
+a {
+  color: #666;
+}
+
+code, pre, label, input, dd:before, dt:before {
+  font-family: "Hasklug Nerd Font Mono", "Hasklug NF", "Hasklug Nerd Font", Hasklig, Monofur, monospace;
+  -moz-tab-size: 4;
+    -o-tab-size: 4;
+       tab-size: 4;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+#repl dt {
+	display: block;
+	position: relative;
+	background: #222;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+#repl dt:first-child {
+	display: flex;
+	padding-bottom: 5px;
+	margin-bottom: 2px;
+}
+
+#repl dt:before {
+	content: ">>> ";
+	opacity: 0.5;
+	display: inline-block;
+	white-space: pre;
+	vertical-align: middle;
+}
+
+#repl dd:before {
+	display: inline-block;
+	white-space: pre;
+	content: "<<< ";
+	opacity: 0.5;
+}
+
+#repl dt:after {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	font-size: inherit;
+	line-height: 1.66;
+}
+
+#repl dt.error {
+	background-color: #F00A;
+	color: black;
+}
+
+#repl .error:after {
+  content: "🛑";
+}
+
+#repl dt.error + * {
+	background-color: #faa;
+	color: black;
+}
+
+#repl dt.error + *:before {
+	content: '';
+}
+
+#repl label {
+	flex: 0 1;
+	padding: 10px 5px 10px 15px;
+	min-width: 5em;
+	text-align: right;
+}
+
+#repl input, #repl dd {
+	flex: 1;
+	background: transparent;
+	padding: 10px 15px;
+	color: inherit;
+	border: none;
+	border-bottom: 2px solid transparent;
+	position: relative;
+}
+
+#repl input {
+	padding: 0 0 5px;
+}
+
+#repl input:focus {
+	outline: none;
+	border: 0px solid ActiveBorder;
+	border-bottom-width: 2px;
+	color: #000;
+}
+
+#repl input::placeholder {
+	color: rgba(127,127,127,0.5);
+}
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #aaa;
+    background: #111;
+  }
+
+  a {
+    color: #999;
+  }
+
+  pre {
+    color: #999;
+    border-color: #333;
+  }
+
+  #repl input:focus {
+    color: white;
+  }
+
+  #repl dt.error {
+    background-color: #300;
+    color: #ddd;
+  }
+
+  #repl dt.error {
+    background-color: #400;
+    color: #999;
+  }
+
+  #repl dt.error + * {
+    background-color: #200;
+    color: #ddd;
+  }
+}
+</style>
+
 <dl id="repl">
 	<dt><input id="input" placeholder="(+ 2 4)" autofocus="true"></dt>
 	<dt><code>(+ 2 2)</code></dt>
