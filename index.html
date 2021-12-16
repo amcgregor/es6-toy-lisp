@@ -310,7 +310,7 @@ repl.addEventListener('click', e => {  // Bound to the overall container for eve
 	e = e || window.event
 	let elem = e.srcElement || e.target
 	
-	if ( !elem.matches('dt:not(:first-child)') ) return
+	if ( !elem.matches('dt code, dt:not(:first-child)') ) return
 	input.value = elem.innerText
 	input.focus()
 }, false)
