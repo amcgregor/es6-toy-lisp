@@ -172,7 +172,7 @@ code, dd::before, dt::before, input, label, pre {
 const load = source => parse(tokenize(source)),
 	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i),
 	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
-	makeProc = (parms, body, env) => (() => interp(body, new Env(parms, arguments, env)))
+	makeProc = (parms, body, env) => ((...args) => interp(body, new Env(parms, args, env)))
 
 function parse(tokens) {
 	if ( !tokens.length ) throw new Error("Unexpected EOF")
