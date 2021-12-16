@@ -1,57 +1,61 @@
 <!DOCTYPE html>
-<title>Interpretoy</title>
+<title>ntrprty</title>
 
 <script>
 // based on lispy by Peter Norvig: http://norvig.com/lispy.html
 // forked from https://gist.github.com/Enichan/4a9fa87aef6405e13e1c072baa117beb by Enichan
+// blame neither for what was done here
+// title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
 const load = source => parse(tokenize(source)),
-	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i)
+	tokenize = source => source.replaceAll("(", " ( ").replaceAll(")", " ) ").split(" ").filter(i => i),
+	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
+	makeProc = (parms, body, env) => (() => interp(body, new Env(parms, arguments, env)))
 
 function parse(tokens) {
-	if (!tokens.length) throw new Error("Unexpected EOF")
+	if ( !tokens.length ) throw new Error("Unexpected EOF")
 	
-	let token = tokens.shift();
-	if (token === "(") {
-		let l = [];
-		while (tokens[0] !== ")") {
-			l.push(parse(tokens));
-		}
-		tokens.shift();
-		return l;
+	let token = tokens.shift()
+	
+	if ( token === "(" ) {
+		let l = []
+		
+		while (tokens[0] !== ")") l.push(parse(tokens))
+		
+		tokens.shift()
+		return l
 	}
-	else if (token === ")") {
-		throw new Error("Unexpected ')'");
-	}
-	else {
-		return atom(token);
-	}
+	else if (token === ")") throw new Error("Unexpected ')'")
+	else return atom(token)
 }
 
 function atom(token) {
-	let num = token * 1;
-	if (num || num === 0) {
-		return num;
-	}
-	return token;
+	let num = token * 1
+	return (num || num === 0) ? num : token
 }
 
-function toLispString(l, s) {
-	return [l].map(function join(v) { 
-		return Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v;
-	}).join(" ");
+class Env {
+	constructor(parms=[], args=[], outer) {
+		parms.map((k, i) => this[k] = args[i])
+		this.outer = outer
+	}
+	
+	find(symbol) {
+		if (typeof this[symbol] !== "undefined") return this
+		if (this.outer) return this.outer.find(symbol)
+		throw new Error(`Symbol ${symbol} undefined`)
+	}
 }
 
 function makeEnv() {
-	var env = new Env();
-	Object.getOwnPropertyNames(Math).forEach(property => {
-		if(typeof Math[property] === 'function') {
-			env[property] = Math[property];
-		}
-	});
-	[ ["+"], ["-"], ["*"], ["/"], ["<"], ["<="], [">"], [">="], [ "=", "===" ]].forEach(op => {
-		env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[1] || op[0]} rhs;`);
-	});
+	let env = new Env()
+	
+	for ( let property of Object.getOwnPropertyNames(Math) )
+		if (typeof Math[property] === 'function') env[property] = Math[property]
+	
+	for ( let op of [["+"], ["-"], ["*"], ["/"], ["<"], ["<="], [">"], [">="], ["=", "==="]] )
+		env[op[0]] = new Function("lhs", "rhs", `return lhs ${op[1] || op[0]} rhs;`)
+	
 	Object.assign(env, {
 		append: (x, y, ...args) => x.concat(y).concat(...args),
 		apply: (f, x) => f.apply(f, x),
@@ -60,7 +64,7 @@ function makeEnv() {
 		cdr: (x) => x.slice(1),
 		cons: (x, y) => [x].concat(y),
 		"eq?": (x, y) => x === y,
-		//"equal?" list contents equality D:
+		// "equal?" list contents equality D:
 		length: (x) => x.length,
 		list: (...args) => args,
 		"list?": (x) => Array.isArray(x),
@@ -71,101 +75,65 @@ function makeEnv() {
 		"procedure?": (x) => typeof x === "function",
 		reverse: (x) => x.reverse(),
 		"symbol?": (x) => typeof x === "string",
-	});
-	return env;
-};
-
-class Env {
-	constructor(parms, args, outer) {
-		if (typeof parms === "undefined") parms = []
-		if (typeof args === "undefined") args = []
-		parms.map((k, i) => this[k] = args[i]);
-		this.outer = outer;
-	}
+	})
 	
-	find(symbol) {
-		if (typeof this[symbol] !== "undefined") {
-			return this;
-		}
-		if (this.outer) {
-			return this.outer.find(symbol);
-		}
-		throw new Error(`Symbol ${symbol} undefined`);
-	}
+	return env
 }
 
-var g = makeEnv();
-
-function makeProc(parms, body, env) {
-	return function() {
-		return interp(body, new Env(parms, arguments, env));
-	};
-}
+var g = makeEnv()
 
 function interp(x, env) {
-	env = env || g;
-	if (typeof x === "string") { // symbol
-		return env.find(x)[x];
-	}
-	else if (!Array.isArray(x)) { // constant literal
-		return x;
-	}
-	else if (x[0] === "quote") { // (quote exp)
-		let exp = x[1];
-		return exp;
-	}
-	else if (x[0] === "if") { // (if test conseq alt)
-		let test = x[1], conseq = x[2], alt = x[3];
-		let exp = interp(test, env) ? conseq : alt;
-		return interp(exp, env);
-	}
-	else if (x[0] === "define") { // (define symbol exp)
-		let symbol = x[1], exp = x[2];
-		env[symbol] = interp(exp, env);
-	}
-	else if (x[0] === "set!") { // (set! symbol exp)
-		let symbol = x[1], exp = x[2];
-		env.find(symbol)[symbol] = interp(exp, env);
-	}
-	else if (x[0] === "lambda") { // (lambda (symbol...) body)
-		let parms = x[1], body = x[2];
-		return makeProc(parms, body, env);
-	}
-	else {
-		let proc = interp(x[0], env);
-		let args = x.slice(1).map(exp => interp(exp, env));
-		if (typeof proc !== "function") {
-			throw new Error("Expected function");
-		}
-		return proc.apply(proc, args);
+	env = env || g
+	if (typeof x === "string") return env.find(x)[x]  // symbol
+	else if (!Array.isArray(x)) return x  // constant literal
+	else if (x[0] === "quote") return x[1]  // (quote exp)
+	else if (x[0] === "if") {  // (if test conseq alt)
+		let test = x[1], conseq = x[2], alt = x[3]
+		let exp = interp(test, env) ? conseq : alt
+		return interp(exp, env)
+	} else if (x[0] === "define") {  // (define symbol exp)
+		let symbol = x[1], exp = x[2]
+		env[symbol] = interp(exp, env)
+	} else if (x[0] === "set!") {  // (set! symbol exp)
+		let symbol = x[1], exp = x[2]
+		env.find(symbol)[symbol] = interp(exp, env)
+	} else if (x[0] === "lambda") {  // (lambda (symbol...) body)
+		let parms = x[1], body = x[2]
+		return makeProc(parms, body, env)
+	} else {
+		let proc = interp(x[0], env)
+		let args = x.slice(1).map(exp => interp(exp, env))
+		if (typeof proc !== "function") throw new Error("Expected function")
+		return proc.apply(proc, args)
 	}
 }
 
 function repl(source, out) {
-	out.innerHTML += "<br>";
-	out.innerHTML += "> " + source;
+	out.innerHTML += "<br>"  // TODO: Pivot to REPL <dt><dd> pair push.
+	out.innerHTML += "> " + source
 
-	let val;
+	let val
+	
 	try {
-		val = interp(load(source));
+		val = interp(load(source))
+	} catch (e) {
+		val = "ERROR: " + e.message
 	}
-	catch (e) {
-		val = "ERROR: " + e.message;
-	}
+	
 	if (typeof val !== "undefined") {
-		out.innerHTML += "<br>";
-		out.innerHTML += toLispString(val);
+		out.innerHTML += "<br>"
+		out.innerHTML += toLispString(val)
 	}
 }
 
 function replSubmit(e) {
-	e = e || window.event;
-	if (e.keyCode == 13) {
-		let elem = e.srcElement || e.target;
-		repl(elem.value, document.getElementById("replOut"));
-		elem.value = "";
-		elem.scrollIntoView();
-	}
+	e = e || window.event
+	if ( e.keyCode != 13 ) return
+	
+	let elem = e.srcElement || e.target
+	repl(elem.value, replOut)
+	elem.value = ""
+	elem.scrollIntoView()  // TODO: Prepend results to avoid this need.
 }
 </script>
 
