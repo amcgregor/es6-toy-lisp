@@ -83,28 +83,32 @@ function makeEnv() {
 var g = makeEnv()
 
 function interp(x, env) {
+	var symbol, exp
 	env = env || g
+	
 	if (typeof x === "string") return env.find(x)[x]  // symbol
 	else if (!Array.isArray(x)) return x  // constant literal
-	else if (x[0] === "quote") return x[1]  // (quote exp)
-	else if (x[0] === "if") {  // (if test conseq alt)
-		let test = x[1], conseq = x[2], alt = x[3]
-		let exp = interp(test, env) ? conseq : alt
-		return interp(exp, env)
-	} else if (x[0] === "define") {  // (define symbol exp)
-		let symbol = x[1], exp = x[2]
-		env[symbol] = interp(exp, env)
-	} else if (x[0] === "set!") {  // (set! symbol exp)
-		let symbol = x[1], exp = x[2]
-		env.find(symbol)[symbol] = interp(exp, env)
-	} else if (x[0] === "lambda") {  // (lambda (symbol...) body)
-		let parms = x[1], body = x[2]
-		return makeProc(parms, body, env)
-	} else {
-		let proc = interp(x[0], env)
-		let args = x.slice(1).map(exp => interp(exp, env))
-		if (typeof proc !== "function") throw new Error("Expected function")
-		return proc.apply(proc, args)
+	else switch ( x[0] ) {
+		case "quote":  // (quote exp)
+			return x[1]
+		case "if":  // (if test conseq alt)
+			let test = x[1], conseq = x[2], alt = x[3]
+			exp = interp(test, env) ? conseq : alt
+			return interp(exp, env)
+		case "define":  // (define symbol exp)
+			symbol = x[1], exp = x[2]
+			env[symbol] = interp(exp, env)
+		case "set!":  // (set! symbol exp)
+			symbol = x[1], exp = x[2]
+			env.find(symbol)[symbol] = interp(exp, env)
+		case "lambda":  // (lambda (symbol...) body)
+			let parms = x[1], body = x[2]
+			return makeProc(parms, body, env)
+		default:
+			let proc = interp(x[0], env)
+			let args = x.slice(1).map(exp => interp(exp, env))
+			if (typeof proc !== "function") throw new Error("Expected function")
+			return proc.apply(proc, args)
 	}
 }
 
