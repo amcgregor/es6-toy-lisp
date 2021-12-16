@@ -160,10 +160,6 @@ code, pre, label, input, dd:before, dt:before {
 
 <dl id="repl">
 	<dt><input id="input" placeholder="(+ 2 4)" autofocus="true"></dt>
-	<dt><code>(+ 2 2)</code></dt>
-	<dd><code>4</code></dt>
-	<dt class=error><code>(+ 2 2</code>
-	<dd><code>some error</code></dt>
 </dl>
 
 <div id=replOut></div>
@@ -275,27 +271,40 @@ function interp(x, env) {
 		default:
 			let proc = interp(x[0], env)
 			let args = x.slice(1).map(exp => interp(exp, env))
-			if (typeof proc !== "function") throw new Error("Expected function")
+			if (typeof proc !== "function") throw new Error("Expected function.")
 			return proc.apply(proc, args)
 	}
 }
 
 function tick(source, out) {
-	out.innerHTML += "<br>"  // TODO: Pivot to REPL <dt><dd> pair push.
-	out.innerHTML += "> " + source
-
+	let inputElement = document.createElement('dt'),
+		inputCode = document.createElement('code'),
+		outputElement = document.createElement('dd'),
+		outputCode = document.createElement('code')
+	
+	inputCode.innerText = source
+	inputElement.append(inputCode)
+	inputElement.classList.add('working')
+	input.parentElement.after(inputElement)
+	
+	outputElement.append(outputCode)
+	
+	
 	let val
 	
 	try {
 		val = interp(load(source))
 	} catch (e) {
-		val = "ERROR: " + e.message
+		outputCode.innerText = e.message
+		inputElement.classList.add('error')
 	}
 	
 	if (typeof val !== "undefined") {
-		out.innerHTML += "<br>"
-		out.innerHTML += toLispString(val)
+		outputCode.innerText = toLispString(val)
 	}
+	
+	inputElement.after(outputElement)
+	inputElement.classList.remove('working')
 }
 
 repl.addEventListener('click', e => {  // Bound to the overall container for event bubbling.
