@@ -2,7 +2,7 @@
 <title>ntrprty</title>
 
 <style>
-*, *:before, *:after {
+*, ::before, ::after {
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
@@ -21,13 +21,11 @@ a {
   color: #666;
 }
 
-code, pre, label, input, dd:before, dt:before {
-  font-family: "Hasklug Nerd Font Mono", "Hasklug NF", "Hasklug Nerd Font", Hasklig, Monofur, monospace;
-  -moz-tab-size: 4;
-    -o-tab-size: 4;
-       tab-size: 4;
-  font-size: inherit;
-  line-height: inherit;
+code, dd::before, dt::before, input, label, pre {
+	font-family: "Hasklug Nerd Font Mono", "Hasklug NF", "Hasklug Nerd Font", Hasklig, Monofur, monospace;
+	tab-size: 4;
+	font-size: inherit;
+	line-height: inherit;
 }
 
 #repl dt {
@@ -44,7 +42,7 @@ code, pre, label, input, dd:before, dt:before {
 	margin-bottom: 2px;
 }
 
-#repl dt:before {
+#repl dt::before {
 	content: ">>> ";
 	opacity: 0.5;
 	display: inline-block;
@@ -52,14 +50,14 @@ code, pre, label, input, dd:before, dt:before {
 	vertical-align: middle;
 }
 
-#repl dd:before {
+#repl dd::before {
 	display: inline-block;
 	white-space: pre;
-	content: "<<< ";
+	content: "&lt;&lt;&lt; ";
 	opacity: 0.5;
 }
 
-#repl dt:after {
+#repl dt::after {
 	position: absolute;
 	right: 10px;
 	top: 5px;
@@ -67,25 +65,25 @@ code, pre, label, input, dd:before, dt:before {
 	line-height: 1.66;
 }
 
-#repl .working:after {
+#repl .working::after {
 	content: "🟢";
 }
 
 #repl dt.error {
 	background-color: #F00A;
-	color: black;
+	color: #000;
 }
 
-#repl .error:after {
+#repl .error::after {
 	content: "🛑";
 }
 
 #repl dt.error + * {
 	background-color: #faa;
-	color: black;
+	color: #000;
 }
 
-#repl dt.error + *:before {
+#repl dt.error + ::before {
 	content: '';
 }
 
@@ -96,7 +94,7 @@ code, pre, label, input, dd:before, dt:before {
 	text-align: right;
 }
 
-#repl input, #repl dd {
+#repl dd, #repl input {
 	flex: 1;
 	background: transparent;
 	padding: 10px 15px;
@@ -141,7 +139,7 @@ code, pre, label, input, dd:before, dt:before {
 	}
 	
 	#repl input:focus {
-		color: white;
+		color: #fff;
 	}
 	
 	#repl dt.error {
