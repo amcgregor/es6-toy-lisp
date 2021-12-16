@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <title>ntrprty</title>
 
-<div id=replOut>REPL:<br></div>
-<br>
-<input size=50 onkeydown="replSubmit()">
+<dl id="repl">
+	<dt><input id="input" placeholder="(+ 2 4)" autofocus="true"></dt>
+	<dt><code>(+ 2 2)</code></dt>
+	<dd><code>4</code></dt>
+	<dt class=error><code>(+ 2 2</code>
+	<dd><code>some error</code></dt>
+</dl>
+
+<div id=replOut></div>
 
 <script>
 // based on lispy by Peter Norvig: http://norvig.com/lispy.html
