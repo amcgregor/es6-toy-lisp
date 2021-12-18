@@ -225,7 +225,8 @@ function makeEnv() {
 		cons: (x, y) => [x].concat(y),
 		display: (...args) => console.log(...args),
 		"eq?": (x, y) => x === y,
-		// "equal?" list contents equality D:
+		"equal?": (x, y) => { for (var i = 0; i < x.length; ++i) if ( x[i] !== y[i] ) return false;
+				return true },
 		length: (x) => x.length,
 		list: (...args) => args,
 		"list?": (x) => Array.isArray(x),
