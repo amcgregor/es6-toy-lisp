@@ -28,6 +28,15 @@ code, dd::before, dt::before, input, label, pre {
 	line-height: inherit;
 }
 
+#clipboard {
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
 #repl dt {
 	display: block;
 	position: relative;
@@ -36,10 +45,15 @@ code, dd::before, dt::before, input, label, pre {
 	cursor: pointer;
 }
 
+#repl dd {
+	cursor: pointer;
+}
+
 #repl dt:first-child {
 	display: flex;
 	padding-bottom: 5px;
 	margin-bottom: 2px;
+	cursor: inherit;
 }
 
 #repl dt::before {
@@ -158,6 +172,8 @@ code, dd::before, dt::before, input, label, pre {
 <dl id=repl>
 	<dt><input autofocus=true id=input placeholder="(+ 2 4)" value="((lambda (x) x) 3)"></dt>
 </dl>
+
+<textarea id=clipboard></textarea>
 
 <script>
 // based on lispy by Peter Norvig: http://norvig.com/lispy.html
@@ -319,9 +335,15 @@ repl.addEventListener('click', e => {  // Bound to the overall container for eve
 	e = e || window.event
 	let elem = e.srcElement || e.target
 	
-	if ( !elem.matches('dt code, dt:not(:first-child)') ) return
-	input.value = elem.innerText
-	input.focus()
+	if ( elem.matches('dt code, dt:not(:first-child)') ) {
+		input.value = elem.innerText
+		input.focus()
+	} else if ( elem.tagName == 'DD' ) {
+		clipboard.innerText = elem.innerText
+		clipboard.select()
+		document.execCommand("copy")
+		input.focus()
+	}
 }, false)
 
 input.addEventListener('keydown', e => {
