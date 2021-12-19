@@ -330,8 +330,8 @@ function tick(source) {
 	inputElement.classList.remove('working')
 }
 
-repl.addEventListener('click', e => {  // Bound to the overall container for event bubbling.
-	// Permit re-use of previously evaluated expressions.
+// Permit re-use of previously evaluated expressions.
+repl.addEventListener('click', e => {
 	e = e || window.event
 	let elem = e.srcElement || e.target
 	
@@ -346,6 +346,7 @@ repl.addEventListener('click', e => {  // Bound to the overall container for eve
 	}
 }, false)
 
+// Process input text when enter / return is pressed.
 input.addEventListener('keydown', e => {
 	e = e || window.event
 	if ( e.keyCode != 13 ) return
