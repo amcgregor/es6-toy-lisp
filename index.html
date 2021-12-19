@@ -71,7 +71,7 @@ code, dd::before, dt::before, input, label, pre {
 	opacity: 0.5;
 }
 
-#repl dt::after {
+#repl >::after {
 	position: absolute;
 	right: 10px;
 	top: 5px;
@@ -90,6 +90,14 @@ code, dd::before, dt::before, input, label, pre {
 
 #repl .error::after {
 	content: "🛑";
+}
+
+#repl dt:not(:first-child):hover::after {
+	content: "💬";
+}
+
+#repl dd:hover::after {
+	content: "📋";
 }
 
 #repl dt.error + * {
