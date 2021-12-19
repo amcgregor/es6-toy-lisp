@@ -337,13 +337,13 @@ repl.addEventListener('click', e => {
 	
 	if ( elem.matches('dt code, dt:not(:first-child)') ) {
 		input.value = elem.innerText
-		input.focus()
 	} else if ( elem.tagName == 'DD' ) {
 		clipboard.innerText = elem.innerText
 		clipboard.select()
 		document.execCommand("copy")
-		input.focus()
 	}
+	
+	input.focus()
 }, false)
 
 // Process input text when enter / return is pressed.
