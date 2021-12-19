@@ -282,21 +282,20 @@ function interp(x, env) {
 		case "quote":  // (quote exp)
 			return x[1]
 		case "if":  // (if test conseq alt)
-			let test = x[1], conseq = x[2], alt = x[3]
-			exp = interp(test, env) ? conseq : alt
-			return interp(exp, env)
+			let [_, test, conseq, alt] = x
+			return interp(interp(test, env) ? conseq : alt, env)
 		case "define":  // (define symbol exp)
-			symbol = x[1], exp = x[2]
+			[_, symbol, exp] = x
 			env[symbol] = interp(exp, env)
 			return
 		case "set!":  // (set! symbol exp)
-			symbol = x[1], exp = x[2]
+			[_, symbol, exp] = x
 			return (env.find(symbol)[symbol] = interp(exp, env))
 		case "eval":  // custom shenanigans
-			let exp = interp(x[1], env)
+			exp = interp(x[1], env)
 			return interp(exp, env)
 		case "lambda":  // (lambda (symbol...) body)
-			let parms = x[1], body = x[2]
+			let [parms, body] = x
 			return makeProc(parms, body, env)
 		default:
 			let proc = interp(x[0], env)
