@@ -198,10 +198,12 @@ class Env {
 	constructor(parms=[], args=[], outer) {
 		parms.map((k, i) => this[k] = args[i])
 		this.outer = outer
+		this.lastEvaluation = null
 	}
 	
 	find(symbol) {
 		if (typeof this[symbol] !== "undefined") return this
+		if (symbol === '_') return {"_": this.lastEvaluation}
 		if (this.outer) return this.outer.find(symbol)
 		throw new Error(`Symbol ${symbol} undefined`)
 	}
@@ -303,7 +305,10 @@ function tick(source) {
 		inputElement.classList.add('error')
 	}
 	
-	if (typeof val !== "undefined") outputCode.innerText = toLispString(val)
+	if (typeof val !== "undefined") {
+		outputCode.innerText = toLispString(val)
+		g.lastEvaluation = val
+	}
 	
 	inputElement.after(outputElement)
 	inputElement.classList.remove('working')
