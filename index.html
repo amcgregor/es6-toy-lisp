@@ -331,7 +331,7 @@ function tick(source) {
 }
 
 // Permit re-use of previously evaluated expressions.
-repl.addEventListener('click', e => {
+document.addEventListener('click', e => {
 	e = e || window.event
 	let elem = e.srcElement || e.target
 	
