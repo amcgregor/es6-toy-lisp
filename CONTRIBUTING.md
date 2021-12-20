@@ -55,7 +55,7 @@ The first step in determining how best to tackle a concern is to ask about it. T
 
 * **Large (especially breaking) changes should be discussed.**
 
-  [Create issues](https://github.com/marrow/mongo/issues/new) for any major changes and enhancements that you wish to make. Discuss things transparently and get community feedback.
+  [Create issues](https://github.com/amcgregor/es6-toy-lisp/issues/new) for any major changes and enhancements that you wish to make. Discuss things transparently and get community feedback.
 
 * **Be excellent to each-other.**
 
@@ -65,7 +65,7 @@ The first step in determining how best to tackle a concern is to ask about it. T
 
   We love code. To ensure our code is understandable and maintainable long into the future it is important that changes:
 
-  1. Ensure cross-runtime (CPython, Pypy) and cross-version (2.7, 3.x) compatibility.
+  1. Ensure cross-runtime compatibility.
   2. Ensure code coverage and code health do not decrease.
   3. Ensure changes are up to date with their parent branch and that they do not conflict.
 
