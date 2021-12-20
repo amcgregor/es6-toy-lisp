@@ -25,7 +25,7 @@ The first step in determining how best to tackle a concern is to ask about it. T
 
   For problems relating to bugs or enhancements to the REPL runtime environment or fledgling interpreter, please utilize the [GitHub Issue Tracker](https://github.com/amcgregor/es6-toy-lisp/issues). If you have identified an issue and have already begun work on a feature branch, just issue a pull request instead of creating a new issue, only to then create a pull request.
 
-  Please do not use the issue tracker for general Lisp language or support questions. IRC is a better resource for quick questions or ones not specific to this interpreter.
+  Please do not use the _issue tracker_ for general Lisp language or support questions. IRC is a better resource for quick questions or ones not specific to this interpreter, and for discussions relating to use of this toy, []GitHub Discussions](https://github.com/amcgregor/es6-toy-lisp/discussions) are available for use.
 
 
 ## First Steps
