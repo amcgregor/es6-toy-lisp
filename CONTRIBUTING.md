@@ -4,15 +4,13 @@ Thank you for considering contributing to this project! We welcome contributions
 
 There are many ways to contribute, from advocacy through writing tutorials or blog posts, improving or translating the documentation, submitting bug reports and feature requests, or writing code which can be incorporated into future releases.
 
-{% common -%}
+
 #### Table of Contents
 
 1. [Asking Questions](#asking-questions)
 2. [First Steps](#first-steps)
 3. [Guidelines](#guidelines)
 4. [Donations and Patreon Support](#donations-and-patreon-support)
-
-{% endmethod %}
 
 
 ## Asking Questions
@@ -74,6 +72,6 @@ The first step in determining how best to tackle a concern is to ask about it. T
 
 ## Donations and Patreon Support
 
-Financial contributions are welcome. To arrange a one-time donation, please contact `GothAlice` on IRC (see details above) and for more ongoing support we have [Patreon](https://www.patreon.com/GothAlice) prepared for you. We have rewards (such as inclusion in the [Patrons team on GitHub](https://github.com/orgs/marrow/teams/patrons) and our eternal gratitude) and goals, so please give it a look; every cent helps pay for infrastructure costs and caffeine. So much caffine.
+Financial contributions are welcome. To arrange a one-time donation, please contact `GothAlice` on IRC (see details above) and for more ongoing support we have [Patreon](https://www.patreon.com/GothAlice) prepared for you. We have rewards (such as inclusion in the [Patrons team on GitHub](https://github.com/orgs/marrow/teams/patrons) and our eternal gratitude) and goals, so please give it a look; every cent helps pay for infrastructure costs and caffeine. So much caffeine.
 
 If at any point you wish or need to cease recurring donations, do not feel bad. Don't put yourself out on our account, and thank you!
