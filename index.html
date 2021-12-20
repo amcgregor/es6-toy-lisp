@@ -37,6 +37,17 @@ code, dd::before, dt::before, input, label, pre {
 	right: 0;
 }
 
+article {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+#repl {
+	flex: 1;
+	overflow: auto;
+}
+
 #repl dt {
 	display: block;
 	position: relative;
@@ -146,6 +157,44 @@ code, dd::before, dt::before, input, label, pre {
 	color: rgba(127,127,127,0.5);
 }
 
+footer {
+	background-color: white;
+	box-shadow: 0 -5px 15px -10px rgba(0,0,0,0.5);
+	line-height: 1;
+	display: flex;
+}
+
+footer button, footer select {
+	appearance: none;
+	-webkit-appearance: none;
+	display: inline-block;
+	border: none;
+	background: transparent;
+	border-radius: 0;
+	font: var(--font) !important;
+	margin: 0;
+	padding: 15px;
+	vertical-align: top;
+	height: 3em;
+	color: inherit;
+}
+
+footer button:hover, footer select:hover,
+footer button:focus, footer select:focus {
+	background: rgba(0,0,0,0.125);
+	color: black;
+	outline: none;
+}
+
+footer select {
+	flex: 1;
+}
+
+footer :disabled {
+	opacity: 0.25;
+	cursor: not-allowed;
+}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		color: #aaa;
@@ -175,12 +224,45 @@ code, dd::before, dt::before, input, label, pre {
 		background-color: #200;
 		color: #ddd;
 	}
+	
+	footer {
+		background: black;
+		color: white;
+		box-shadow: 0 -5px 15px -10px rgba(0,0,0,0.5);
+	}
+	
+	footer button:hover, footer select:hover,
+	footer button:focus, footer select:focus {
+		background: rgba(255,255,255,0.5);
+		color: black;
+	}
 }
 </style>
 
-<dl id=repl>
-	<dt><input autofocus=true id=input placeholder="(+ 2 4)"></dt>
-</dl>
+<article>
+	<dl id=repl>
+		<dt><input autofocus=true id=input placeholder="(+ 2 4)"></dt>
+	</dl>
+	<footer>
+		<button title="Re-execute all expressions." disabled>♻️</button>
+		<button title="Create new workbook." disabled>📄</button>
+		<select id=books disabled>
+			<option id=unsaved>Unsaved workbook…
+			<option>Create New…
+			<optgroup label="Special">
+				<option>Global Workbook
+				<option>Default Workbook
+			</optgroup>
+			<optgroup id="saved" label="Saved Workbooks">
+				<option>First Saved Example
+				<option>Second Saved Example
+			</optgroup>
+		</select>
+		<button id=load title="Load workbook." disabled>📤</button>
+		<button id=store title="Store workbook." disabled>📥</button>
+		<button id=clear title="Clear workbook." disabled>🗑</button>
+	</footer>
+</article>
 
 <textarea id=clipboard></textarea>
 
