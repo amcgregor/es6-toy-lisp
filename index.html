@@ -500,7 +500,18 @@ input.addEventListener('keydown', e => {
 // Serialize then de-serialize the current expression set to "refresh" or re-execute it.
 refresh.addEventListener('click', e => loadWorkbook(storeWorkbook()))
 
-// Sele
+// Selection of a new workbook to unpack that workbook.
+books.addEventListener('change', e => {
+	if ( localStorage.hasOwnProperty(books.value) ) {
+		let expressions = localStorage[books.value]
+		
+		// TODO: Make conditional on there being dirty changes.
+		if ( !clear.hasAttribute('disabled') )
+			if ( !confirm("Are you sure?\nUnsaved changes to the current workbook will be lost.") ) return;
+		
+		loadWorkbook(JSON.parse(localStorage[books.value]))
+	}
+})
 
 // Permit clearing of the active workbook and reinitialization from fixture.
 clear.addEventListener('click', clearWorkbook)
