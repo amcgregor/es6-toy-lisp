@@ -245,8 +245,7 @@ footer :disabled {
 		<dt><input autofocus=true id=input placeholder="(+ 2 4)"></dt>
 	</dl>
 	<footer>
-		<button title="Re-execute all expressions." disabled>♻️</button>
-		<button title="Create new workbook." disabled>📄</button>
+		<button id=refresh title="Re-execute all expressions." disabled>♻️</button>
 		<select id=books>
 			<option value=_new>
 			<optgroup label=Special>
@@ -414,6 +413,7 @@ function clearWorkbook(e) {
 	
 	g = makeEnv()
 	books.value = ''
+	refresh.setAttribute('disabled', true)
 	clear.setAttribute('disabled', true)
 	
 	for ( let elem of repl.querySelectorAll('dt:not(:first-child), dd') ) elem.remove()
@@ -424,6 +424,9 @@ function loadWorkbook(expressions) {
 	
 	for ( let expression of expressions )
 		tick(expression)
+	
+	clear.removeAttribute('disabled')
+	refresh.removeAttribute('disabled')
 }
 
 function storeWorkbook() {
@@ -462,6 +465,7 @@ function tick(source) {
 		g.lastEvaluation = val
 	}
 	
+	refresh.removeAttribute('disabled')
 	inputElement.after(outputElement)
 	inputElement.classList.remove('working')
 }
@@ -492,6 +496,11 @@ input.addEventListener('keydown', e => {
 	elem.value = ""
 	clear.removeAttribute('disabled')
 })
+
+// Serialize then de-serialize the current expression set to "refresh" or re-execute it.
+refresh.addEventListener('click', e => loadWorkbook(storeWorkbook()))
+
+// Sele
 
 // Permit clearing of the active workbook and reinitialization from fixture.
 clear.addEventListener('click', clearWorkbook)
