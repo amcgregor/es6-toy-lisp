@@ -461,6 +461,15 @@ input.addEventListener('keydown', e => {
 	let elem = e.srcElement || e.target
 	tick(elem.value)
 	elem.value = ""
+	clear.removeAttribute('disabled')
+})
+
+// Permit clearing of the active workbook and reinitialization from fixture.
+clear.addEventListener('click', e => {
+	g = makeEnv()
+	books.value = ''
+	clear.setAttribute('disabled', true)
+	
 })
 
 // Populate initial stored workbooks.
