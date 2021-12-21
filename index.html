@@ -247,17 +247,14 @@ footer :disabled {
 	<footer>
 		<button title="Re-execute all expressions." disabled>♻️</button>
 		<button title="Create new workbook." disabled>📄</button>
-		<select id=books disabled>
-			<option id=unsaved>Unsaved workbook…
-			<option>Create New…
-			<optgroup label="Special">
-				<option>Global Workbook
-				<option>Default Workbook
+		<select id=books>
+			<option value=_unsaved>Unsaved workbook…
+			<option value=_new>Create New…
+			<optgroup label=Special>
+				<option value=_global>Global Workbook
+				<option value=_default>Default Workbook
 			</optgroup>
-			<optgroup id="saved" label="Saved Workbooks">
-				<option>First Saved Example
-				<option>Second Saved Example
-			</optgroup>
+			<optgroup id=saved label="Saved Workbooks"></optgroup>
 		</select>
 		<button id=load title="Load workbook." disabled>📤</button>
 		<button id=store title="Store workbook." disabled>📥</button>
