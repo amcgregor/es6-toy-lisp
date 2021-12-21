@@ -365,6 +365,8 @@ function interp(x, env) {
 		case "if":  // (if test conseq alt)
 			[_, test, conseq, alt] = x
 			return interp(interp(test, env) ? conseq : alt, env)
+		case "defvar":  // (defvar symbol exp)
+		case "setq":  // (setq symbol exp)
 		case "define":  // (define symbol exp)
 			[_, symbol, exp] = x
 			env[symbol] = interp(exp, env)
