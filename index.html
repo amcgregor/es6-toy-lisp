@@ -458,4 +458,14 @@ input.addEventListener('keydown', e => {
 	tick(elem.value)
 	elem.value = ""
 })
+	
+// Populate initial stored workbooks.
+for ( [k, v] of Object.entries(localStorage) ) {
+	if ( k[0] == '_' ) continue
+	
+	let elem = document.createElement('option')
+	elem.innerText = k
+	
+	saved.append(elem)
+}
 </script>
