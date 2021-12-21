@@ -389,6 +389,19 @@ function interp(x, env) {
 	}
 }
 
+if ( !localStorage.hasOwnProperty('_global') )  // Initialize.
+	localStorage.setItem("_global", JSON.stringify(["(define pi 3.1415926)"]))
+
+let expressions = JSON.parse(localStorage['_global'])
+
+console.info("Executing _global fixture.")
+
+for ( var expression of expressions ) {
+	console.log("≫", expression)
+		var result = interp(load(expression))
+		console.log("≪", result)
+}
+
 function tick(source) {
 	let inputElement = document.createElement('dt'),
 		inputCode = document.createElement('code'),
