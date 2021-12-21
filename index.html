@@ -407,12 +407,12 @@ function interp(x, env) {
 	}
 }
 
-function clearWorkbook(e) {
+function clearWorkbook(e, deselect=true) {
 	if ( (typeof x !== "undefined") )
 		if (  !e.shiftKey && !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
 	
 	g = makeEnv()
-	books.value = ''
+	if ( deselect ) books.value = ''
 	refresh.setAttribute('disabled', true)
 	clear.setAttribute('disabled', true)
 	
@@ -420,7 +420,7 @@ function clearWorkbook(e) {
 }
 
 function loadWorkbook(expressions) {
-	clearWorkbook()
+	clearWorkbook(undefined, false)
 	
 	for ( let expression of expressions )
 		tick(expression)
