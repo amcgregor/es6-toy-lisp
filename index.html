@@ -408,6 +408,33 @@ function interp(x, env) {
 	}
 }
 
+function clearWorkbook(e) {
+	if ( (typeof x !== "undefined") )
+		if (  !e.shiftKey && !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
+	
+	g = makeEnv()
+	books.value = ''
+	clear.setAttribute('disabled', true)
+	
+	for ( let elem of repl.querySelectorAll('dt:not(:first-child), dd') ) elem.remove()
+}
+
+function loadWorkbook(expressions) {
+	clearWorkbook()
+	
+	for ( let expression of expressions )
+		tick(expression)
+}
+
+function storeWorkbook() {
+	let expressions = []
+	
+	for ( let elem of repl.querySelectorAll('dt:not(:first-child)') )
+		expressions.push(elem.innerText)
+	
+	return expressions.reverse()
+}
+
 function tick(source) {
 	let inputElement = document.createElement('dt'),
 		inputCode = document.createElement('code'),
@@ -467,15 +494,7 @@ input.addEventListener('keydown', e => {
 })
 
 // Permit clearing of the active workbook and reinitialization from fixture.
-clear.addEventListener('click', e => {
-	if ( !e.shiftKey && !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
-	
-	g = makeEnv()
-	books.value = ''
-	clear.setAttribute('disabled', true)
-	
-	for ( let elem of repl.querySelectorAll('dt:not(:first-child), dd') ) elem.remove()
-})
+clear.addEventListener('click', clearWorkbook)
 
 // Populate initial stored workbooks.
 for ( [k, v] of Object.entries(localStorage) ) {
