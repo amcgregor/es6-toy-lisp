@@ -354,7 +354,7 @@ function makeEnv() {
 var g = makeEnv()
 
 function interp(x, env) {
-	var symbol, exp
+	var symbol, exp, _
 	env = env || g
 	
 	if (typeof x === "string") return env.find(x)[x]  // symbol
@@ -363,7 +363,7 @@ function interp(x, env) {
 		case "quote":  // (quote exp)
 			return x[1]
 		case "if":  // (if test conseq alt)
-			let [_, test, conseq, alt] = x
+			[_, test, conseq, alt] = x
 			return interp(interp(test, env) ? conseq : alt, env)
 		case "define":  // (define symbol exp)
 			[_, symbol, exp] = x
@@ -376,7 +376,7 @@ function interp(x, env) {
 			exp = interp(x[1], env)
 			return interp(exp, env)
 		case "lambda":  // (lambda (symbol...) body)
-			let [parms, body] = x
+			[parms, body] = x
 			return makeProc(parms, body, env)
 		default:
 			let proc = interp(x[0], env)
