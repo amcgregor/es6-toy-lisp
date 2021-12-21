@@ -466,7 +466,7 @@ input.addEventListener('keydown', e => {
 
 // Permit clearing of the active workbook and reinitialization from fixture.
 clear.addEventListener('click', e => {
-	if ( !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
+	if ( !e.shiftKey && !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
 	
 	g = makeEnv()
 	books.value = ''
