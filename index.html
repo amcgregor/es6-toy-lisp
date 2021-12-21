@@ -348,6 +348,24 @@ function makeEnv() {
 		"symbol?": (x) => typeof x === "string",
 	})
 	
+	if ( !localStorage.hasOwnProperty('_global') ) {
+		console.warn("Initializing _global fixture.")
+		localStorage.setItem("_global", JSON.stringify(["(define pi 3.1415926)"]))
+	}
+	
+	let init = JSON.parse(localStorage['_global'])
+	console.info("Executing _global fixture.")
+	
+	for ( var expression of init ) {
+		console.debug("≫ " + expression)
+		try {
+			var result = interp(load(expression), env)
+			console.debug("≪", result)
+		} catch (e) {
+			console.error(e.message)
+		}
+	}
+	
 	return env
 }
 
@@ -387,19 +405,6 @@ function interp(x, env) {
 				throw new Error("Expected function, got " + (proc || "").toString())
 			return proc.apply(proc, args)
 	}
-}
-
-if ( !localStorage.hasOwnProperty('_global') )  // Initialize.
-	localStorage.setItem("_global", JSON.stringify(["(define pi 3.1415926)"]))
-
-let expressions = JSON.parse(localStorage['_global'])
-
-console.info("Executing _global fixture.")
-
-for ( var expression of expressions ) {
-	console.log("≫", expression)
-		var result = interp(load(expression))
-		console.log("≪", result)
 }
 
 function tick(source) {
