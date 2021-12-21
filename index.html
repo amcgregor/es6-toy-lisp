@@ -470,6 +470,7 @@ clear.addEventListener('click', e => {
 	books.value = ''
 	clear.setAttribute('disabled', true)
 	
+	for ( let elem of repl.querySelectorAll('dt:not(:first-child), dd') ) elem.remove()
 })
 
 // Populate initial stored workbooks.
