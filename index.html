@@ -269,6 +269,8 @@ footer :disabled {
 // blame neither for what was done here
 // title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
+var activeWorkbook = null;
+
 const load = source => parse(tokenize(source)),
 	tokenize = source => source.replaceAll("'", " ' ").replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "").split(" ").filter(i => i),
 	toLispString = (l, s) => [l].map(v => Array.isArray(v) ? "(" + v.map(join).join(" ") + ")" : v).join(" "),
