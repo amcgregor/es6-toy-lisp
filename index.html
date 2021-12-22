@@ -268,7 +268,7 @@ footer :disabled {
 // blame neither for what was done here
 // title based on https://www.folklore.org/StoryView.py?story=Hungarian.txt
 
-var activeWorkbook = null;
+window.activeWorkbook = null;
 
 const loadString = source => parse(tokenize(source)),
 	tokenize = source => source.replaceAll("'", " ' ").replaceAll("(", " ( ").replaceAll(")", " ) ").replaceAll("\n", "").replaceAll("\r", "").replaceAll("\t", "").split(" ").filter(i => i),
@@ -412,7 +412,11 @@ function clearWorkbook(e, deselect=true) {
 		if (  !e.shiftKey && !confirm("Are you sure?\nAny unsaved changes will be lost.") ) return
 	
 	g = makeEnv()
-	if ( deselect ) books.value = ''
+	if ( deselect ) {
+		console.debug("Deselecting active workbook.")
+		books.value = ''
+		activeWorkbook = null
+	}
 	refresh.setAttribute('disabled', true)
 	clear.setAttribute('disabled', true)
 	
@@ -498,6 +502,9 @@ input.addEventListener('keydown', e => {
 	clear.removeAttribute('disabled')
 })
 
+// Clear then re-evaluate the "active workbook".
+load.addEventListener('click', e => loadWorkbook(JSON.parse(localStorage[activeWorkbook])))
+
 // Serialize then de-serialize the current expression set to "refresh" or re-execute it.
 refresh.addEventListener('click', e => loadWorkbook(storeWorkbook()))
 
@@ -517,6 +524,7 @@ books.addEventListener('change', e => {
 		
 		console.debug("Selecting workbook: " + books.value)
 		loadWorkbook(JSON.parse(localStorage[books.value]))
+		activeWorkbook = books.value
 		input.focus()
 	}
 })
