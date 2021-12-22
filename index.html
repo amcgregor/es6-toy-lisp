@@ -505,6 +505,16 @@ input.addEventListener('keydown', e => {
 // Clear then re-evaluate the "active workbook".
 load.addEventListener('click', e => loadWorkbook(JSON.parse(localStorage[activeWorkbook])))
 
+// Prompt for and store the serialized workbook.
+store.addEventListener('click', e => {
+	var label;
+	
+	if ( label = prompt("Please enter a short label for this workbook.", books.value) )
+		localStorage.setItem(label, JSON.stringify(storeWorkbook()))
+	
+	console.info("Stored current workbook as: " + label)
+})
+
 // Serialize then de-serialize the current expression set to "refresh" or re-execute it.
 refresh.addEventListener('click', e => loadWorkbook(storeWorkbook()))
 
@@ -518,7 +528,6 @@ books.addEventListener('change', e => {
 	if ( localStorage.hasOwnProperty(books.value) ) {
 		let expressions = localStorage[books.value]
 		
-		// TODO: Make conditional on there being dirty changes.
 		if ( !clear.hasAttribute('disabled') )
 			if ( !confirm("Are you sure?\nUnsaved changes to the current workbook will be lost.") ) return;
 		
