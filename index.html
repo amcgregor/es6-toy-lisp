@@ -247,7 +247,7 @@ footer :disabled {
 	<footer>
 		<button id=refresh title="Re-execute all expressions." disabled>♻️</button>
 		<select id=books>
-			<option value=_new>
+			<option value=>
 			<optgroup label=Special>
 				<option value=_global>Global Workbook
 				<option value=_default>Default Workbook
@@ -255,7 +255,7 @@ footer :disabled {
 			<optgroup id=saved label="Saved Workbooks"></optgroup>
 		</select>
 		<button id=load title="Load workbook." disabled>📤</button>
-		<button id=store title="Store workbook." disabled>📥</button>
+		<button id=store title="Store workbook.">📥</button>
 		<button id=clear title="Clear workbook." disabled>🗑</button>
 	</footer>
 </article>
@@ -465,6 +465,7 @@ function tick(source) {
 		g.lastEvaluation = val
 	}
 	
+	if ( books.value !== "" ) load.removeAttribute('disabled')
 	refresh.removeAttribute('disabled')
 	inputElement.after(outputElement)
 	inputElement.classList.remove('working')
@@ -502,6 +503,11 @@ refresh.addEventListener('click', e => loadWorkbook(storeWorkbook()))
 
 // Selection of a new workbook to unpack that workbook.
 books.addEventListener('change', e => {
+	if ( books.value === '' ) {
+		load.setAttribute('disabled', true)
+		return
+	}
+	
 	if ( localStorage.hasOwnProperty(books.value) ) {
 		let expressions = localStorage[books.value]
 		
@@ -509,7 +515,9 @@ books.addEventListener('change', e => {
 		if ( !clear.hasAttribute('disabled') )
 			if ( !confirm("Are you sure?\nUnsaved changes to the current workbook will be lost.") ) return;
 		
+		console.debug("Selecting workbook: " + books.value)
 		loadWorkbook(JSON.parse(localStorage[books.value]))
+		input.focus()
 	}
 })
 
